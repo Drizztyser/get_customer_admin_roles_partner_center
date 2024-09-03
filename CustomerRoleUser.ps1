@@ -12,13 +12,13 @@ try {
 # Création d'une collection pour enregistrer la liste des {user - tenant - admin role}
 $admin_role_collection = @()
 $error_log_collection = @()
-$index = 0
+$index = @()
 
 # Début de la récupération des roles Admin pour chaque utilisateur de chaque tenant
-foreach($customer in $list_customer[0..3]) {
+foreach($customer in $list_customer[6..8]) {
 
     # Obtenir l'index du tenant pour le nom d'enregistrement du fichier
-    $index = $list_customer.indexof($customer)
+    $index += $list_customer.indexof($customer) + 1
 
     # Affichage du tenant en cours d'analyse
     write-output ("`nVerification du tenant : {0} ({1}/{2}) ..." -f $customer.name, ($list_customer::indexof($list_customer,$customer)+1), $list_customer.Length)
@@ -63,8 +63,8 @@ foreach($customer in $list_customer[0..3]) {
 }
 
 
-$fileName = "C:\Users\$env:USERNAME\Documents\liste_admin_tenant{0}.csv" -f, $index
+$fileName = Join-Path -Path (Get-Location) -ChildPath ("liste_admin_tenant{0}_{1}.csv" -f $index[0], $index[-1])
 $admin_role_collection | Export-Csv -Path $fileName -Delimiter ";" -NoTypeInformation
 
-$errorLogFileName = "C:\Users\$env:USERNAME\Documents\error_admmin_role_tenant{0}.txt" -f, $index
+$errorLogFileName = Join-Path -Path (Get-Location) -ChildPath ("error_admin_role_tenant{0}_{1}.txt" -f $index[0], $index[-1])
 $error_log_collection | Out-file -FilePath $errorLogFileName
