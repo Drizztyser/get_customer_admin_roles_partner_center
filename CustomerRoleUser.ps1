@@ -9,7 +9,7 @@ try {
         $list_customer = Get-PartnerCustomer
     }
 
-# Création d'une collection pour enregistrer la liste des {user - tenant - admin role}
+# Création d'une collection pour l'enregistrement des fichiers
 $admin_role_collection = @()
 $error_log_collection = @()
 $index = @()
@@ -62,7 +62,8 @@ foreach($customer in $list_customer[6..8]) {
     $admin_role_collection += $table_users    
 }
 
-
+# SAuvegarde des fichiers
+ 
 $fileName = Join-Path -Path (Get-Location) -ChildPath ("liste_admin_tenant{0}_{1}.csv" -f $index[0], $index[-1])
 $admin_role_collection | Export-Csv -Path $fileName -Delimiter ";" -NoTypeInformation
 
